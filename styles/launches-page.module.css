@@ -1,41 +1,48 @@
 .container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 94vh;
-}
-
-.table{
-    display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    overflow-x: hidden;
-    width: 90%;
-    height: 90%;
+    align-items: center;
+    height: 94vh;
 }
 
 .table_header{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    padding: 10px;
+    width: 60%;
+    margin: 5vh 0 0 0;
+    padding: 10px 0 10px 0;
 }
 
 .separator{
-    width: 100%;
+    width: 62%;
     border: 1px solid black;
     margin: 10px 0 10px 0;
 }
 
 .col_head{
-    /* margin: auto; */
+    flex-basis: 15%;
+}
+
+.col_head_site{
+    flex-basis: 50%;
+}
+
+.col_item{
+    flex-basis: 15%;
+}
+
+.col_item_site{
+    flex-basis: 50%;
 }
 
 .table_row{
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
     border: 1px solid black;
     border-radius: 15px;
     padding: 20px 20px;
+    width: 60%;
     margin: 5px;
 }
