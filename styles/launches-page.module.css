@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 94vh;
+}
+
+.table{
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 90%;
+    height: 90%;
+}
+
+.table_header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.separator{
+    width: 100%;
+    border: 1px solid black;
+    margin: 10px 0 10px 0;
+}
+
+.col_head{
+    /* margin: auto; */
+}
+
+.table_row{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+    border-radius: 15px;
+    padding: 20px 20px;
+    margin: 5px;
+}
