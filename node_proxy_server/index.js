@@ -1,11 +1,15 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');
 const app = express();
 const PORT = 5000;
 
+app.use(cors());
+
 app.get('/launches', (req, res) => {
-  console.log("run");
-  axios.get('https://api.spacexdata.com/v3/launches', {params: {limit: 10, offset: 0}})
+  const offset = req.query.offset;
+  const limit = req.query.limit;
+  axios.get('https://api.spacexdata.com/v3/launches', {params: {offset: offset, limit:limit}})
     .then(response => {
       console.log(response.data);
       res.json(response.data);
