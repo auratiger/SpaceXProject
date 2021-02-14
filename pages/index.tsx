@@ -1,72 +1,64 @@
-import Head from 'next/head'
 import react, {useState, useEffect} from 'react';
+import { useRouter } from 'next/router'
 import axios from 'axios';
+import { BsBoxArrowInRight } from "react-icons/bs";
 
 import styles from '../styles/launches-page.module.css';
 
-type launchElement = {
-  crew: null,
-  details:string,
-  flight_number:number,
-  is_tentative:boolean,
-  launch_date_local:string,
-  launch_date_utc:number,
-  launch_failure_details:any,
-  launch_site: any,
-  launch_success:boolean,
-  launch_window:number,
-  launch_year:string,
-  links:any,
-  mission_id:Array<any>,
-  mission_name:string,
-  rocket:any,
-  ships:Array<any>,
-  static_fire_date_unix:number,
-  static_fire_date_utc:string,
-  tbd:boolean,
-  telemetry:any,
-  tentative_max_precision:string,
-  timeline:any,
-  upcoming:boolean
-}
-
 export default function Home() {
-  const [launches, setLaunches] = useState<Array<launchElement>>([]);
+  const [launches, setLaunches] = useState<Array<any>>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
+
 
   const queryLimit:number = 15;
   const [offset, setOffset] = useState<number>(0);
 
-  useEffect(() => {
-    (async () => {
-      const config = {
-        params: {
-          offset: offset,
-          limit: queryLimit
-        }
+  const fetchData = async () => {
+    const config = {
+      params: {
+        offset: offset,
+        limit: queryLimit
       }
+    }
 
-      const result = await axios("http://localhost:5000/launches", config);
-      console.log(result.data);
-      setOffset(offset + queryLimit);
-      setLoading(false);
-      setLaunches((state) => [...state, ...result.data]);
+    const result = await axios("http://localhost:5000/launches", config);
+    console.log(result.data);
+    setOffset(offset + queryLimit);
+    setLoading(false);
+    setLaunches((state) => [...state, ...result.data]);
+  };
 
-    })();
+  useEffect(() => {
+    fetchData();
   }, []);
 
-  const tableHeaders:Array<string> = [
-    "flight number", "date", "launch site", "actions"
+  const handleClick = (index) => {
+    router.push("launch");
+  }
+
+  const handleScroll = (e) => {
+    const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    if(bottom){
+      console.log("bottom");
+      fetchData();
+    }
+  }
+
+  const tableHeaders:Array<any> = [
+    {name: "flight number", class: "col_item"},
+    {name: "date", class: "col_item"},
+    {name: "launch site", class: "col_item_site"},
+    {name: "action", class: "col_item_action"},
   ]
 
   const renderTableHeaders = () => {
     return tableHeaders.map((element, index) => {
-      if(index == 2) return <div className={styles.col_head_site}>{element}</div>
-      return <div className={styles.col_head}>{element}</div>
+      return <div key={"head " + index} className={styles[element.class]}>{element.name}</div>
     })
   }
 
-  const renderLaunchElements = (element) => {
+  const renderLaunchElements = (element, index) => {
     const date = new Date(element["launch_date_unix"]);
     const formattedTime = `${date.getFullYear()}-${date.getMonth()}-${date.getDay()} ${date.getHours()}:${date.getMinutes()}`
     return (
@@ -74,7 +66,7 @@ export default function Home() {
         <div className={styles.col_item}>{element["flight_number"]}</div>
         <div className={styles.col_item}>{formattedTime}</div>
         <div className={styles.col_item_site}>{element["launch_site"]["site_name_long"]}</div>
-        <div className={styles.col_item}>{"action"}</div>
+        <div className={styles.col_item_action} onClick={(index) => handleClick(index)}><BsBoxArrowInRight/></div>
       </>
     )
   }
@@ -84,18 +76,21 @@ export default function Home() {
         <h1>loading</h1> :
         launches.map((element, index:number) => {
           return <div key={index} className={styles.table_row}>
-            {renderLaunchElements(element)}
+            {renderLaunchElements(element, index)}
           </div>
         });
   }
 
   return (
     <div className={styles.container}>
-      <div className={styles.table_header}>
-        {renderTableHeaders()}
-      </div>
-      <hr className={styles.separator}/>
-      {renderLauches()}
+        <div className={styles.table_header}>
+          {renderTableHeaders()}
+        </div>
+        <hr className={styles.separator}/>
+        <div className={styles.table_rows} onScroll={handleScroll}>
+          {renderLauches()}
+          <div style={{margin: "20px 0 20px 0"}}></div>
+        </div>
     </div>
   )
 }
