@@ -71,7 +71,7 @@ export default function Home() {
         <div className={styles.col_item}>{element["flight_number"]}</div>
         <div className={styles.col_item}>{formattedTime}</div>
         <div className={styles.col_item_site}>{element["launch_site"]["site_name_long"]}</div>
-        <div className={styles.col_item_action} onClick={(e) => handleClick(e, index)}><BsBoxArrowInRight/></div>
+        <BsBoxArrowInRight className={styles.col_item_action} onClick={(e) => handleClick(e, index)}/>
       </>
     )
   }

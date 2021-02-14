@@ -1,6 +1,8 @@
 body{
     margin: 0;
-    background-color: rgb(13, 13, 13);
+    /* background-color: rgb(13, 13, 13); */
+    background-image: url("../public/background.jpg");
+    background-repeat: no-repeat, repeat;
 }
 
 span, h1, h2, h3, h4{
