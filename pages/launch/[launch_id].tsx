@@ -20,52 +20,57 @@ enum launchData {
 }
 
 const launch = () => {
+    const context = useLaunch();
     const router = useRouter();
+
     const [launch, setLaunch] = useState({});
     const [loading, setLoading] = useState(true);
 
-    const context = useLaunch();
 
     const fetchData = async (id) => {
         const config = { params: {
-                id: router.query.launch_id
+                id: id+1
             }
         }
-
+        
         const result = await axios("http://localhost:5000/launch", config);
         setLaunch(result.data);
         setLoading(false);
     };
 
     useEffect(() => {
+        if(!router.query.launch_id) return;
+
         const launch_id:number = parseInt(router.query.launch_id?.toString());
+        
         if(context.launches[launch_id]){
-            console.log(3);
-            
             setLaunch(context.launches[launch_id]);
             setLoading(false);
         }else{
-            console.log(5);
-            
+            // if launch data is not loaded, fetch the data from the server
             fetchData(launch_id);
         }
     }, [router]);
 
     const overviewTableElements = [
-        {key: "rocket", value: "1", class: "overview_row"},
-        {key: "site", value: "1", class: "overview_row"},
-        {key: "success", value: "1", class: "overview_row"},
-        {key: "flight_number", value: "1", class: "overview_row"},
+        {key: "Flight number", value: [launchData.number], class: "overview_row"},
+        {key: "Rocket", value: [launchData.rocket, launchData.rocket_name], class: "overview_row"},
+        {key: "Launching Site", value: [launchData.site, launchData.site_name], class: "overview_row"},
+        {key: "Launch Successful", value: [launchData.success], class: "overview_row"},
     ];
 
     const renderOverviewTable = () => {
         return (
             <div>
                 {overviewTableElements.map(el => {
+                    let value = launch;
+                    el.value.map(el => {
+                        value=value[el]
+                    });
                     return <div className={styles[el.class]}>
                         <span>{el.key}</span>
                         <span style={{margin:"auto"}}></span>
-                        <span>{el.value}</span>
+                        <span>{value.toString()}</span>
                     </div>
                 })}
             </div>
@@ -74,10 +79,10 @@ const launch = () => {
 
     const renderOverview = () => {
         return loading ?
-            <div></div> :
+            <div>Loading</div> :
             <div className={styles.overview_container}>
                 <div className={styles.overview_left}>
-                    <h2>{`Mission ${launch[launchData.mission]}`}</h2>
+                    <h1 className={styles.mission_lable}>{`Mission ${launch[launchData.mission]}`}</h1>
                     <h1 className={styles.lable}>OVERVIEW</h1>
                     {renderOverviewTable()}
                 </div>
@@ -87,9 +92,24 @@ const launch = () => {
             </div>
     }
 
+    const renderDetailCard = () => {
+        return <div className={styles.detail_card_container}>
+            <span className={styles.details_lable}>{"Launch details:"}</span>
+            <span className={styles.details}>{launch[launchData.details] ? launch[launchData.details] : "No details have been specified."}</span>
+        </div>
+    }
+
+    const renderRocketSpecs = () => {
+        return <div className={styles.rocket_specs_container}>
+
+        </div>
+    }
+
     return (
         <div className={styles.container}>
             {renderOverview()}
+            {renderDetailCard()}
+            {renderRocketSpecs()}
         </div>
     )
 };
