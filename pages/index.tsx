@@ -52,10 +52,9 @@ export default function Home() {
   }
 
   const tableHeaders:Array<any> = [
-    {name: "flight number", class: "col_item"},
-    {name: "date", class: "col_item"},
-    {name: "launch site", class: "col_item_site"},
-    {name: "action", class: "col_item_action"},
+    {name: "Flight number", class: "col_header"},
+    {name: "Date", class: "col_header_date"},
+    {name: "Launch site", class: "col_header_site"},
   ]
 
   const renderTableHeaders = () => {
@@ -79,7 +78,9 @@ export default function Home() {
 
   const renderLauches = () => {
       return loading ? 
-        <h1>loading</h1> :
+        Array.apply(null, Array(offset + queryLimit)).map(el => {
+          return <div className={styles.empty_table_row}>loading...</div>
+        }):
         context.launches.map((element, index:number) => {
           return <div key={index} className={styles.table_row}>
             {renderLaunchElements(element, index)}
