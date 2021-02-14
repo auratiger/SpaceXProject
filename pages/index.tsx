@@ -2,14 +2,16 @@ import react, {useState, useEffect} from 'react';
 import { useRouter } from 'next/router'
 import axios from 'axios';
 import { BsBoxArrowInRight } from "react-icons/bs";
+import {useLaunch} from '../contexts/LauncesContext';
 
 import styles from '../styles/launches-page.module.css';
 
 export default function Home() {
-  const [launches, setLaunches] = useState<Array<any>>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
+  const context = useLaunch();
+
+  const [loading, setLoading] = useState(true);
 
   const queryLimit:number = 15;
   const [offset, setOffset] = useState<number>(0);
@@ -21,26 +23,30 @@ export default function Home() {
         limit: queryLimit
       }
     }
-
     const result = await axios("http://localhost:5000/launches", config);
-    console.log(result.data);
+    context.setLaunches((state) => [...state, ...result.data]);
     setOffset(offset + queryLimit);
     setLoading(false);
-    setLaunches((state) => [...state, ...result.data]);
   };
 
   useEffect(() => {
-    fetchData();
+    if(context.launches.length === 0){
+      (async () => {
+        fetchData();
+      })();
+    }else{
+      setLoading(false);
+    }
   }, []);
 
-  const handleClick = (index) => {
-    router.push("launch");
+  const handleClick = (e, index) => {
+    e.preventDefault();
+    router.push(`launch/${index}`, `launch/${index}`);
   }
 
   const handleScroll = (e) => {
     const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
     if(bottom){
-      console.log("bottom");
       fetchData();
     }
   }
@@ -54,7 +60,7 @@ export default function Home() {
 
   const renderTableHeaders = () => {
     return tableHeaders.map((element, index) => {
-      return <div key={"head " + index} className={styles[element.class]}>{element.name}</div>
+      return <span key={"head " + index} className={styles[element.class]}>{element.name}</span>
     })
   }
 
@@ -66,7 +72,7 @@ export default function Home() {
         <div className={styles.col_item}>{element["flight_number"]}</div>
         <div className={styles.col_item}>{formattedTime}</div>
         <div className={styles.col_item_site}>{element["launch_site"]["site_name_long"]}</div>
-        <div className={styles.col_item_action} onClick={(index) => handleClick(index)}><BsBoxArrowInRight/></div>
+        <div className={styles.col_item_action} onClick={(e) => handleClick(e, index)}><BsBoxArrowInRight/></div>
       </>
     )
   }
@@ -74,7 +80,7 @@ export default function Home() {
   const renderLauches = () => {
       return loading ? 
         <h1>loading</h1> :
-        launches.map((element, index:number) => {
+        context.launches.map((element, index:number) => {
           return <div key={index} className={styles.table_row}>
             {renderLaunchElements(element, index)}
           </div>
@@ -86,7 +92,6 @@ export default function Home() {
         <div className={styles.table_header}>
           {renderTableHeaders()}
         </div>
-        <hr className={styles.separator}/>
         <div className={styles.table_rows} onScroll={handleScroll}>
           {renderLauches()}
           <div style={{margin: "20px 0 20px 0"}}></div>

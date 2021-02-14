@@ -19,6 +19,19 @@ app.get('/launches', (req, res) => {
     })
 });
 
+app.get('/launch', (req, res) => {
+  const id = req.query.id;
+  axios.get(`https://api.spacexdata.com/v3/launches/${id}`)
+    .then(response => {
+      console.log("----------------------------------------------");
+      console.log(response.data);
+      res.json(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    })
+})
+
 app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`)
 });
