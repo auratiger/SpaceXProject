@@ -5,16 +5,35 @@
     width: 100%;
 }
 
+.back_btn{
+    margin: 0 3vw 0 0;
+    background-color: #eeee;
+    height: 45px;
+    width: 45px;
+    padding: 3px 25px 3px 25px;
+    border: 1px solid white;
+    border-radius: 15px;
+}
+
 .overview_container{
     display: flex;
     flex-direction: row;
+    justify-content: center;
     margin: 2vh 0;
     width: 95%;
+}
+
+.overview_header{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .overview_left{
     display: flex;
     flex-direction: column;
+
     flex-basis: 55%;
 }
 

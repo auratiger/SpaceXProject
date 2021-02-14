@@ -2,6 +2,7 @@ import react, {useState, useEffect} from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useLaunch } from '../../contexts/LauncesContext';
+import { TiArrowBack } from "react-icons/ti";
 
 import styles from '../../styles/launch.module.css';
 
@@ -82,7 +83,10 @@ const launch = () => {
             <div>Loading</div> :
             <div className={styles.overview_container}>
                 <div className={styles.overview_left}>
-                    <h1 className={styles.mission_lable}>{`Mission ${launch[launchData.mission]}`}</h1>
+                    <div className={styles.overview_header}>
+                        <TiArrowBack className={styles.back_btn} onClick={() => router.back()}/>
+                        <h1 className={styles.mission_lable}>{`Mission ${launch[launchData.mission]}`}</h1>
+                    </div>
                     <h1 className={styles.lable}>OVERVIEW</h1>
                     {renderOverviewTable()}
                 </div>
