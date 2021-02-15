@@ -16,23 +16,13 @@ export default function Home() {
   const queryLimit:number = 15;
   const [offset, setOffset] = useState<number>(0);
 
-  const fetchData = async () => {
-    const config = {
-      params: {
-        offset: offset,
-        limit: queryLimit
-      }
-    }
-    const result = await axios("http://localhost:5000/launches", config);
-    context.setLaunches((state) => [...state, ...result.data]);
-    setOffset(offset + queryLimit);
-    setLoading(false);
-  };
-
   useEffect(() => {
     if(context.launches.length === 0){
       (async () => {
-        fetchData();
+        const result = await context.fetchData("http://localhost:5000/launches", {offset: offset, limit: queryLimit});
+        context.setLaunches((state) => [...state, ...result.data]);
+        setOffset(offset + queryLimit);
+        setLoading(false);
       })();
     }else{
       setLoading(false);
@@ -44,15 +34,17 @@ export default function Home() {
     router.push(`launch/${index}`, `launch/${index}`);
   }
 
-  const handleScroll = (e) => {
+  const handleScroll = async (e) => {
     const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
     if(bottom){
-      fetchData();
+      const result = await context.fetchData("http://localhost:5000/launches", {offset: offset, limit: queryLimit});
+      context.setLaunches((state) => [...state, ...result.data]);
+      setOffset(offset + queryLimit);
     }
   }
 
   const tableHeaders:Array<any> = [
-    {name: "Flight number", class: "col_header"},
+    {name: "Flight No.", class: "col_header"},
     {name: "Date", class: "col_header_date"},
     {name: "Launch site", class: "col_header_site"},
   ]
@@ -69,8 +61,8 @@ export default function Home() {
     return (
       <>
         <div className={styles.col_item}>{element["flight_number"]}</div>
-        <div className={styles.col_item}>{formattedTime}</div>
-        <div className={styles.col_item_site}>{element["launch_site"]["site_name_long"]}</div>
+        <div className={styles.col_date}>{formattedTime}</div>
+        <div className={styles.col_item_site}>{element["launch_site"]["site_name"]}</div>
         <BsBoxArrowInRight className={styles.col_item_action} onClick={(e) => handleClick(e, index)}/>
       </>
     )

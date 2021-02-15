@@ -2,29 +2,30 @@ body{
     margin: 0;
     /* background-color: rgb(13, 13, 13); */
     background-image: url("../public/background.jpg");
-    background-repeat: no-repeat, repeat;
+    /* background-repeat: no-repeat, repeat; */
 }
 
 span, h1, h2, h3, h4{
     color: #ffff;
     font-size: 1.25rem;
+    font-family: sans-serif;
 }
 
 ::-webkit-scrollbar-track
 {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  background-color: #F5F5F5;
+  background-color: #00000000;
   border-radius: 15px;
 }
 
 ::-webkit-scrollbar
 {
-  width: 8px;
-  background-color: #F5F5F5;
+  width: 0px;
+  background-color: #00000000;
 }
 
 ::-webkit-scrollbar-thumb
 {
-  background-color: #000000;
+  background-color: #00000000;
   border-radius: 15px;
 }
