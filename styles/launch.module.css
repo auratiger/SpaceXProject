@@ -29,6 +29,7 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    margin: 2vh 0 3vh 0;
 }
 
 .overview_left{
@@ -48,11 +49,11 @@
 .overview_row{
     display: flex;
     flex-direction: row;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 600;
     width: 70%;
-    margin: 1vh 1vw 1vh 8vw;
-    padding: 2.5vh 0.5vw 2.5vh 0.5vw;
+    margin: 2vh 1vw 2vh 8vw;
+    padding: 2.7vh 0.5vw 2.7vh 0.5vw;
     border-bottom: 2px solid rgba(255, 255, 255, 0.514);
     border-radius: 3px;
     justify-content: space-around;
@@ -78,6 +79,7 @@
     text-align: center;
     border: 1px solid black;
     border-radius: 15px;
+    margin: 12vh 0;
     padding: 40px;
     background-color: rgba(150, 150, 150, 0.4);
     box-shadow: 2px 2px 3px white;

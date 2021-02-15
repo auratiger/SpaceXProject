@@ -69,7 +69,7 @@ const launch = () => {
         const query:Array<string> = param.split('/');
 
         query.map(el => {
-            value=value[el];
+            value=value?.[el];
         })
 
         return value;
@@ -97,7 +97,7 @@ const launch = () => {
                     return <div key={el.key} className={styles[el.class]}>
                         <span>{el.key}</span>
                         <span style={{margin:"auto"}}></span>
-                        <span>{value.toString()}</span>
+                        <span>{value?.toString()}</span>
                     </div>
                 })}
             </div>
@@ -105,9 +105,7 @@ const launch = () => {
     }
 
     const renderOverview = () => {
-        return loading ?
-            <div>Loading</div> :
-            <div className={styles.overview_container}>
+        return <div className={styles.overview_container}>
                 <div className={styles.overview_left}>
                     <div className={styles.overview_header}>
                         <TiArrowBack className={styles.back_btn} onClick={() => router.back()}/>
@@ -117,7 +115,7 @@ const launch = () => {
                     {renderOverviewTable()}
                 </div>
                 <div className={styles.overview_right}>
-                    {/* <img src={decoupleValue(launch, launchData.patch)} alt="patch" width="85%" height="85%"/> */}
+                    <img src={decoupleValue(launch, launchData.patch)} alt="patch" width="85%" height="85%"/>
                 </div>
             </div>
     }
