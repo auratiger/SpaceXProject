@@ -28,7 +28,13 @@ enum rocketData {
     massL = "mass/kg",
     company = "company",
     country = "country",
+    rocketType = 'rocket_type',
     payloads = "payload_weights",
+    engineNo = "engines/number",
+    engineType = "engines/type",
+    engineLayout = "engines/layout",
+    engineVersion = "engines/version",
+    engineVacuum = "engines/thrust_vacuum/kN",
 }
 
 const launch = () => {
@@ -109,7 +115,7 @@ const launch = () => {
                 <div className={styles.overview_left}>
                     <div className={styles.overview_header}>
                         <TiArrowBack className={styles.back_btn} onClick={() => router.back()}/>
-                        <h1 className={styles.mission_lable}>{`Mission ${launch[launchData.mission]}`}</h1>
+                        <h1 className={styles.mission_lable}>{`Mission ${launch?.[launchData.mission]}`}</h1>
                     </div>
                     <h1 className={styles.lable}>OVERVIEW</h1>
                     {renderOverviewTable()}
@@ -131,16 +137,19 @@ const launch = () => {
         {header: "Rocket specs", ref: createRef<HTMLDivElement>(), rows: [
             {key: "Country", value: rocketData.country, prefix: ""},
             {key: "Company", value: rocketData.company, prefix: ""},
+            {key: "Type", value: rocketData.rocketType, prefix: ""},
             {key: "Height", value: rocketData.heightM, prefix: "M"},
             {key: "Diameter", value: rocketData.diameterM, prefix: "M"},
             {key: "Mass", value: rocketData.massK, prefix: "Kg"},
+        ]},
+        {header: "Engine", ref: createRef<HTMLDivElement>(), rows: [
+            {key: "Number of engines", value: rocketData.engineNo, prefix: ""},
+            {key: "Type", value: rocketData.engineType, prefix: ""},
+            {key: "Version", value: rocketData.engineVersion, prefix: ""},
+            {key: "Layout", value: rocketData.engineLayout, prefix: ""},
+            {key: "Thrust vacuum", value: rocketData.engineVacuum, prefix: "kN"},
         ]},
         {header: "Payloads", ref: createRef<HTMLDivElement>(), rows: [
-            {key: "Height", value: rocketData.heightM, prefix: "M"},
-            {key: "Diameter", value: rocketData.diameterM, prefix: "M"},
-            {key: "Mass", value: rocketData.massK, prefix: "Kg"},
-        ]},
-        {header: "Engines", ref: createRef<HTMLDivElement>(), rows: [
             {key: "Height", value: rocketData.heightM, prefix: "M"},
             {key: "Diameter", value: rocketData.diameterM, prefix: "M"},
             {key: "Mass", value: rocketData.massK, prefix: "Kg"},

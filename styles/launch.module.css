@@ -21,6 +21,7 @@
     flex-direction: row;
     justify-content: center;
     margin: 2vh 0;
+    height: 70vh;
     width: 95%;
 }
 
@@ -104,7 +105,7 @@
     align-items: center;
     width: 45%;
     padding: 3vh 2vw 3vh 2vw;
-    margin: 4vh 0 10vh 0;
+    margin: 4vh 0 20vh 0;
     border: 1px solid white;
     border-right: 0;
     border-left: 0;
@@ -112,7 +113,9 @@
 }
 
 .table_header{
-    height: 20px;
+    display: flex;
+    align-items: center;
+    height: 3vh;
     width: 96%;
     background-color: #eeee;
     border-radius: 10px;
@@ -133,9 +136,10 @@
     width: 90%;
     height: 20px;
     border-radius: 5px;
-    background-color: #eeeb;
+    background-color: rgba(238, 238, 238, 0.562);
+    box-shadow: 0px 2px 4px white;
     padding: 10px 15px 10px 15px;
-    margin: 1px 0 1px 0;
+    margin: 2px 0 0.5px 0;
 }
 
 .table_toggle{
