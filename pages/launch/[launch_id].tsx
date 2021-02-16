@@ -1,6 +1,6 @@
 import react, {useState, useEffect, createRef} from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import decoupleValue from '../../utils/decoupleValue'
 import { useLaunch } from '../../contexts/LauncesContext';
 import { TiArrowBack } from "react-icons/ti";
 import { FaAngleDown } from 'react-icons/fa';
@@ -70,16 +70,6 @@ const launch = () => {
             })();
         }
     }, [router]);
-
-    const decoupleValue = (value:{} = {}, param:string = "") => {
-        const query:Array<string> = param.split('/');
-
-        query.map(el => {
-            value=value?.[el];
-        })
-
-        return value;
-    }
 
     const toggleRow = (element) => {
         if(element.style.display == "none")
