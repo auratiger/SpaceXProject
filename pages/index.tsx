@@ -1,8 +1,8 @@
-import react, {useState, useEffect} from 'react';
+import react, {useState, useEffect, useMemo} from 'react';
 import { useRouter } from 'next/router'
-import axios from 'axios';
 import { BsBoxArrowInRight } from "react-icons/bs";
 import {useLaunch} from '../contexts/LauncesContext';
+import ClipLoader from "react-spinners/ClipLoader";
 
 import styles from '../styles/launches-page.module.css';
 
@@ -12,6 +12,7 @@ export default function Home() {
   const context = useLaunch();
 
   const [loading, setLoading] = useState(true);
+  const [loadingNew, setLoadingNew] = useState(false);
 
   const queryLimit:number = 15;
   const [offset, setOffset] = useState<number>(0);
@@ -37,8 +38,10 @@ export default function Home() {
   const handleScroll = async (e) => {
     const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
     if(bottom){
+      setLoadingNew(true)
       const result = await context.fetchData("http://localhost:5000/launches", {offset: offset, limit: queryLimit});
       context.setLaunches((state) => [...state, ...result.data]);
+      setLoadingNew(false);
       setOffset(offset + queryLimit);
     }
   }
@@ -68,17 +71,25 @@ export default function Home() {
     )
   }
 
-  const renderLauches = () => {
-      return loading ? 
-        Array.apply(null, Array(offset + queryLimit)).map(el => {
-          return <div className={styles.empty_table_row}>loading...</div>
-        }):
-        context.launches.map((element, index:number) => {
-          return <div key={index} className={styles.table_row}>
-            {renderLaunchElements(element, index)}
-          </div>
-        });
+  const renderEmptyTableRows = () => {
+        return Array.apply(null, Array(offset + queryLimit)).map(el => {
+          return <div className={styles.empty_table_row}><ClipLoader size={20} css={"margin-left: 9%"}/></div>
+        })
   }
+
+  const renderLauches = useMemo(() => {
+      return loading ? 
+        renderEmptyTableRows() :
+        context.launches.map((element, index:number) => {
+          return <>
+            <div key={index} className={styles.table_row}>
+              {renderLaunchElements(element, index)}
+            </div>
+            {(loadingNew && index === context.launches.length-1) ? 
+              renderEmptyTableRows() : null}
+          </>
+        });
+  }, [loading, loadingNew])
 
   return (
     <div className={styles.container}>
@@ -86,7 +97,7 @@ export default function Home() {
           {renderTableHeaders()}
         </div>
         <div className={styles.table_rows} onScroll={handleScroll}>
-          {renderLauches()}
+          {renderLauches}
           <div style={{margin: "20px 0 20px 0"}}></div>
         </div>
     </div>
